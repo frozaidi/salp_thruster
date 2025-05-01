@@ -7,7 +7,7 @@ import time
 import threading
 
 # Serial port configuration (CHANGE THIS to match your setup)
-SERIAL_PORT = '/dev/tty.usbmodem1303'
+SERIAL_PORT = '/dev/tty.usbmodem1403'
 BAUD_RATE = 1000000
 
 # Serial port open
@@ -21,7 +21,7 @@ adc_buffer = deque([0]*max_points, maxlen=max_points)
 # CSV log file
 timestamp = time.strftime("%Y%m%d_%H%M%S")
 # csv_filename = f"loadcell_log_{timestamp}.csv"
-csv_filename = f"Forward_test.csv"
+csv_filename = f"Forward_130_styro_2.csv"
 csv_file = open(csv_filename, mode='w', newline='')
 csv_writer = csv.writer(csv_file)
 csv_writer.writerow(["Tick (ms)", "ADC Value"])
