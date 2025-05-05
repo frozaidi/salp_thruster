@@ -21,7 +21,7 @@ adc_buffer = deque([0]*max_points, maxlen=max_points)
 # CSV log file
 timestamp = time.strftime("%Y%m%d_%H%M%S")
 # csv_filename = f"loadcell_log_{timestamp}.csv"
-csv_filename = f"Forward_130_styro_2.csv"
+csv_filename = f"Reverse_170_styro.csv"
 csv_file = open(csv_filename, mode='w', newline='')
 csv_writer = csv.writer(csv_file)
 csv_writer.writerow(["Tick (ms)", "ADC Value"])
