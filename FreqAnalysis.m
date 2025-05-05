@@ -1,6 +1,6 @@
 close all;
 % data = readtable('CSVFiles/LoadCellTest500Hz.csv'); % Replace with your filename
-data = readtable('Forward_130_styro_2.csv'); % Replace with your filename
+data = readtable('Forward_170_styro.csv'); % Replace with your filename
 
 
 
