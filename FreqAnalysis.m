@@ -1,6 +1,6 @@
 close all;
 % data = readtable('CSVFiles/LoadCellTest500Hz.csv'); % Replace with your filename
-data = readtable('Forward_170_styro.csv'); % Replace with your filename
+data = readtable('Forward_20_styro.csv'); % Replace with your filename
 
 
 
@@ -74,6 +74,7 @@ y0 = yline(0,'LineWidth',3,'Color','k',Layer='bottom');
 % plot(times_period, thr_low, 'b', 'LineWidth', 2);
 xlabel('Time(s)');
 ylabel('Force (N)');
+title(['Frequency: ', num2str(frequency, '%.2f'), ' Hz (Styrofoam)']);
 % title('Average with Shaded Standard Deviation');
 grid on;
 %     ylim([0,0.00025])
