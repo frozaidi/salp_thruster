@@ -1,8 +1,7 @@
 close all;
 % data = readtable('CSVFiles/LoadCellTest500Hz.csv'); % Replace with your filename
-data = readtable('Forward_20_styro.csv'); % Replace with your filename
-
-
+data = readtable('Forward_170_styro_2.csv'); % Replace with your filename
+freq = 100*.229/30;
 
 time = data{:,1};
 time_seconds = time./1000;
@@ -74,7 +73,7 @@ y0 = yline(0,'LineWidth',3,'Color','k',Layer='bottom');
 % plot(times_period, thr_low, 'b', 'LineWidth', 2);
 xlabel('Time(s)');
 ylabel('Force (N)');
-title(['Frequency: ', num2str(frequency, '%.2f'), ' Hz (Styrofoam)']);
+% title(['Frequency: ', num2str(frequency, '%.2f'), ' Hz (Styrofoam)']);
 % title('Average with Shaded Standard Deviation');
 grid on;
 %     ylim([0,0.00025])
@@ -87,3 +86,12 @@ plot(ax4,times_period,thr_std,'Color',"#D73F09", 'LineWidth', 2)
 grid(ax4,"on")
 ylim([0,2])
 hold(ax4,"off")
+
+impulse_per_cycle = trapz(times_period,thr_avg);
+max_thrust = max(thr_avg);
+
+close all;
+
+sprintf("Frequency: %1.4f\n Max thrust in N: %1.4f\n Impulse per cycle in Ns: %1.4f",...
+    frequency,max_thrust,impulse_per_cycle)
+% sprintf("Impulse per cycle in Ns: %1.4f",impulse_per_cycle)
