@@ -66,10 +66,12 @@ f3.Position = [2000 100 900 700];
 hold on;
 % fill([times_period, flipud(times_period)], [thr_upp, flipud(thr_low)], [0.8 0.8 1], ...
 %     'EdgeColor', 'none', 'FaceAlpha', 0.4);  % shaded region
-
+plot(hax3,a,b(24:23+numel(a)),'LineWidth',3,'Color',"#000000",'LineStyle',':');
 fill(hax3,coord_combine(:,1),coord_combine(:,2),[0.8,0.8,0.8],'EdgeColor','none')
 plot(hax3,times_period, thr_avg, 'Color',"#D73F09", 'LineWidth', 2);           % average line
+
 y0 = yline(0,'LineWidth',3,'Color','k',Layer='bottom');
+legend(hax3,{'Predicted','', 'Experimental'})
 % plot(times_period, thr_low, 'b', 'LineWidth', 2);
 xlabel('Time(s)');
 ylabel('Force (N)');
@@ -90,7 +92,7 @@ hold(ax4,"off")
 impulse_per_cycle = trapz(times_period,thr_avg);
 max_thrust = max(thr_avg);
 
-close all;
+% close all;
 
 sprintf("Frequency: %1.4f\n Max thrust in N: %1.4f\n Impulse per cycle in Ns: %1.4f",...
     frequency,max_thrust,impulse_per_cycle)
