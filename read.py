@@ -7,12 +7,12 @@ import time
 import threading
 
 # Serial port configuration (CHANGE THIS to match your setup)
-SERIAL_PORT = '/dev/tty.usbmodem1403'
+SERIAL_PORT = '/dev/tty.usbmodem11403'
 BAUD_RATE = 1000000
 
 # Serial port open
 ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
-ser.write("Reset\n".encode('ascii'))
+# ser.write("Reset\n".encode('ascii'))
 
 # Plot buffer
 max_points = 200
@@ -33,13 +33,15 @@ buffer_lock = threading.Lock()
 
 # Serial reading thread
 def read_serial():
-    # starttime = time.time()
+    starttime = time.time()
     while True:
         try:
             # cur_time = (time.time()-starttime)
             # if cur_time >5.0:
-            #     ser.write("Reset".encode('ascii'))
+            #     a = "Reset".encode()
+            #     ser.write(a)
             #     print(cur_time)
+            #     starttime = time.time()
             line = ser.readline().decode('utf-8').strip()
             if line:
                 parts = line.split(',')
