@@ -1,6 +1,6 @@
 close all;
-% data = readtable('CSVFiles/LoadCellTest500Hz.csv'); % Replace with your filename
-data = readtable('Forward_170_styro_2.csv'); % Replace with your filename
+data = readtable('CSVFiles/2cam_170_pi4.csv'); % Replace with your filename
+% data = readtable('Forward_170_styro_2.csv'); % Replace with your filename
 freq = 100*.229/30;
 
 time = data{:,1};
@@ -55,6 +55,9 @@ coord_low = [times_period,thr_low];
 
 coord_combine = [coord_upp;flipud(coord_low)];
 
+impulse_per_cycle = trapz(times_period,thr_avg);
+max_thrust = max(thr_avg);
+
 plot(time_seconds, newtons); hold on;
 plot(peakLocs, peakVals, 'ro'); % Highlight peaks
 title(['Estimated Frequency: ', num2str(frequency, '%.2f'), ' Hz']);
@@ -67,6 +70,8 @@ hold on;
 % fill([times_period, flipud(times_period)], [thr_upp, flipud(thr_low)], [0.8 0.8 1], ...
 %     'EdgeColor', 'none', 'FaceAlpha', 0.4);  % shaded region
 % plot(hax3,a,b(24:23+numel(a)),'LineWidth',3,'Color',"#000000",'LineStyle',':');
+title(sprintf("2 Cam, pi/4 (Impulse/cycle: %.3f Ns)",impulse_per_cycle))
+ylim([-.5 1.4])
 fill(hax3,coord_combine(:,1),coord_combine(:,2),[0.8,0.8,0.8],'EdgeColor','none')
 plot(hax3,times_period, thr_avg, 'Color',"#D73F09", 'LineWidth', 2);           % average line
 
@@ -89,8 +94,7 @@ grid(ax4,"on")
 ylim([0,2])
 hold(ax4,"off")
 
-impulse_per_cycle = trapz(times_period,thr_avg);
-max_thrust = max(thr_avg);
+
 
 % close all;
 
