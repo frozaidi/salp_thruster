@@ -1,5 +1,5 @@
 close all;
-filename = 'CSVFiles/ThrustTestsFinal/3cam_170_pi8.csv';
+filename = ['CSVFiles/ThrustTestsFinal/3cam_170_pi8_nocheck.csv'];
 data = readtable(filename); % Replace with your filename
 % data = readtable('Forward_170_styro_2.csv'); % Replace with your filename
 freq = 100*.229/30;
@@ -9,7 +9,7 @@ phase_offset = regexp(filename,'\d*+pi+\d*','match');
 
 time = data{:,1};
 time_seconds = time./1000;
-times = time./1000-27.4;
+times = time./1000;
 thrust = data{:,2};
 
 timestep = time_seconds(2)-time_seconds(1);
@@ -37,6 +37,8 @@ thrust_adj = newtons(init_start_idx:init_end_idx);
 times_period = linspace(0,meanPeriod,period_itr);
 
 thrust_reshape = reshape(thrust_adj,[],numel(peakLocs));
+
+% thrust_reshape = thrust_reshape(10:end-10,1:end);
 % 
 % times_adj = times(5978:15602);
 % % thrust_adj = thrust(5978:15602);
