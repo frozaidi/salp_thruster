@@ -7,12 +7,12 @@ import time
 import threading
 
 # Serial port configuration (CHANGE THIS to match your setup)
-SERIAL_PORT = '/dev/tty.usbmodem11403'
+SERIAL_PORT = '/dev/tty.usbmodem11303'
 BAUD_RATE = 1000000
 
 # Serial port open
 ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
-# ser.write("Reset\n".encode('ascii'))
+# ser.write("Reset".encode())
 
 # Plot buffer
 max_points = 200
