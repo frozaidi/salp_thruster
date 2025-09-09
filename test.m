@@ -1,5 +1,5 @@
 % Load CSV data
-data = readtable('CSVFiles/FrequencyTests/3cam_170_pi8.csv');  % Replace with actual filename
+data = readtable(['CSVFiles/ThrustTestsFinal/3cam_170_pi8.csv']);  % Replace with actual filename
 time = data{:,1}./1000;       % Convert ms to seconds
 thrust = data{:,2};
 
@@ -7,7 +7,7 @@ thrust = data{:,2};
 newtons = thrust./14500.*9.81.*1; % in mN
 
 peak_max = max(newtons);
-peak_threshold = 0.98;
+peak_threshold = 0.95;
 
 [~, peakIdx] = findpeaks(newtons, ...
     'MinPeakProminence', peak_max*peak_threshold, ...

@@ -19,6 +19,32 @@ newtons = thrust./14500.*9.81.*1; % in mN
 peak_max = max(newtons);
 peak_threshold = 0.85;
 
+[~, peakIdx] = findpeaks(newtons, ...
+    'MinPeakProminence', peak_max*peak_threshold, ...
+    'MinPeakDistance',0.5);
+
+% --- Step 2: Extract individual cycles ---
+nCycles = length(peakIdx) - 1;
+nInterpPoints = 500;
+allCycles = zeros(nCycles, nInterpPoints);
+
+for i = 1:1:nCycles
+    idxStart = peakIdx(i);
+    idxEnd = peakIdx(i+1);
+    
+    cycleThrust = newtons(idxStart:idxEnd);
+    cycleTime = time(idxStart:idxEnd);
+    
+    % Normalize time to 0–1 range
+    tNorm = linspace(0, 1, length(cycleTime));
+    tInterp = linspace(0, 1, nInterpPoints);
+    
+    % Interpolate thrust
+    allCycles(i, :) = interp1(tNorm, cycleThrust, tInterp, 'linear');
+end
+
+thrust_reshape = allCycles';
+
 [peakVals, peakLocs] = findpeaks(newtons, time_seconds, ...
     'MinPeakProminence', peak_max*peak_threshold, ...
     'MinPeakDistance', 0.5);
@@ -28,15 +54,15 @@ meanPeriod = mean(peakIntervals); % Average period
 frequency = 1 / meanPeriod; % Hz
 
 period_itr = floor(meanPeriod/timestep);
-init_peak_idx = find(time_seconds==peakLocs(1));
-init_start_idx = init_peak_idx - floor(period_itr/4);
-init_end_idx = init_start_idx + period_itr*numel(peakLocs)-1;
-
-times_adj = times(init_start_idx:init_end_idx);
-thrust_adj = newtons(init_start_idx:init_end_idx);
-times_period = linspace(0,meanPeriod,period_itr);
-
-thrust_reshape = reshape(thrust_adj,[],numel(peakLocs));
+% init_peak_idx = find(time_seconds==peakLocs(1));
+% init_start_idx = init_peak_idx - floor(period_itr/4);
+% init_end_idx = init_start_idx + period_itr*numel(peakLocs)-1;
+% 
+% times_adj = times(init_start_idx:init_end_idx);
+% thrust_adj = newtons(init_start_idx:init_end_idx);
+% times_period = linspace(0,meanPeriod,period_itr);
+% 
+% thrust_reshape = reshape(thrust_adj,[],numel(peakLocs));
 
 % thrust_reshape = thrust_reshape(10:end-10,1:end);
 % 
@@ -51,10 +77,16 @@ thrust_reshape = reshape(thrust_adj,[],numel(peakLocs));
 thr_avg = mean(thrust_reshape,2);
 thr_std = std(thrust_reshape,0,2);
 
+% Shift the mean cycle by +0.25 phase
+shiftAmount = round(0.25 * nInterpPoints);
+% coord_combine_shifted = circshift(coord_combine,shiftAmount);
+thr_avg = circshift(thr_avg, shiftAmount);
+thr_std = circshift(thr_std, shiftAmount);
+
 thr_upp = (thr_avg + thr_std);
 thr_low = (thr_avg - thr_std);
 
-times_period = linspace(0,meanPeriod,period_itr)';
+times_period = linspace(0,meanPeriod,500)';
 
 coord_upp = [times_period,thr_upp];
 coord_low = [times_period,thr_low];
@@ -76,7 +108,7 @@ hold on;
 % fill([times_period, flipud(times_period)], [thr_upp, flipud(thr_low)], [0.8 0.8 1], ...
 %     'EdgeColor', 'none', 'FaceAlpha', 0.4);  % shaded region
 % plot(hax3,a,b(24:23+numel(a)),'LineWidth',3,'Color',"#000000",'LineStyle',':');
-title(sprintf("%s, %s, (Impulse/cycle: %.3f Ns)",string(cam_num),string(phase_offset),impulse_per_cycle))
+% title(sprintf("%s, %s, (Impulse/cycle: %.3f Ns)",string(cam_num),string(phase_offset),impulse_per_cycle))
 ylim([-1.2 1.4])
 fill(hax3,coord_combine(:,1),coord_combine(:,2),[0.8,0.8,0.8],'EdgeColor','none')
 plot(hax3,times_period, thr_avg, 'Color',"#D73F09", 'LineWidth', 2);           % average line
@@ -90,7 +122,7 @@ ylabel('Force (N)');
 % title('Average with Shaded Standard Deviation');
 grid on;
 %     ylim([0,0.00025])
-set(hax3,'FontWeight','bold','FontSize',15,'FontName','OpenSans')
+set(hax3,'FontWeight','bold','FontSize',20,'FontName','OpenSans')
 set(f3,'Color','white')
 hold off
 
