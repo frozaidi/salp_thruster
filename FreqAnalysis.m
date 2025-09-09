@@ -1,5 +1,5 @@
 close all;
-filename = ['CSVFiles/ThrustTestsFinal/3cam_170_pi8_nocheck.csv'];
+filename = ['CSVFiles/ThrustTestsFinal/3cam_170_pi8.csv'];
 data = readtable(filename); % Replace with your filename
 % data = readtable('Forward_170_styro_2.csv'); % Replace with your filename
 freq = 100*.229/30;
