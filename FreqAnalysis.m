@@ -1,11 +1,13 @@
-close all;
-filename = ['CSVFiles/ThrustTestsFinal/3cam_170_pi8.csv'];
+close all; clear all;
+filename = ['CSVFiles/ThrustTestsFinal/3cam_170_0pi.csv'];
 data = readtable(filename); % Replace with your filename
 % data = readtable('Forward_170_styro_2.csv'); % Replace with your filename
 freq = 100*.229/30;
 
 cam_num = regexp(filename,'\d+cam','match');
 phase_offset = regexp(filename,'\d*+pi+\d*','match');
+rot_num = regexp(filename,'_*(\d{2,3})_','tokens');
+rot_num = str2double(rot_num{1});
 
 time = data{:,1};
 time_seconds = time./1000;
@@ -18,10 +20,12 @@ newtons = thrust./14500.*9.81.*1; % in mN
 
 peak_max = max(newtons);
 peak_threshold = 0.85;
+% rot_num = 100;
+delay_num = 1/(rot_num*0.229/60*2)*.51;
 
 [~, peakIdx] = findpeaks(newtons, ...
     'MinPeakProminence', peak_max*peak_threshold, ...
-    'MinPeakDistance',0.5);
+    'MinPeakDistance',delay_num*500);
 
 % --- Step 2: Extract individual cycles ---
 nCycles = length(peakIdx) - 1;
@@ -47,7 +51,7 @@ thrust_reshape = allCycles';
 
 [peakVals, peakLocs] = findpeaks(newtons, time_seconds, ...
     'MinPeakProminence', peak_max*peak_threshold, ...
-    'MinPeakDistance', 0.5);
+    'MinPeakDistance', delay_num);
 
 peakIntervals = diff(peakLocs); % Time between peaks
 meanPeriod = mean(peakIntervals); % Average period
@@ -136,6 +140,6 @@ hold off
 
 % close all;
 
-sprintf("Frequency: %1.4f\n Max thrust in N: %1.4f\n Impulse per cycle in Ns: %1.4f",...
+sprintf("Frequency: %1.2f\n Max thrust in N: %1.2f\n Impulse per cycle in Ns: %1.3f",...
     frequency,max_thrust,impulse_per_cycle)
 % sprintf("Impulse per cycle in Ns: %1.4f",impulse_per_cycle)
