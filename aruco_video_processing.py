@@ -6,13 +6,14 @@ import os
 # -------------------------
 # CONFIGURATION
 # -------------------------
-ground_ids = [1, 2, 3]   # IDs of ground markers (we only use the first as reference)
-robot_id = 0             # ID of the robot's ArUco marker
-marker_length = 0.135    # Marker size in meters
+ground_ids = [0,1,2]   # IDs of ground markers (we only use the first as reference)
+robot_id = 4             # ID of the robot's ArUco marker
+# marker_length = 0.135    # Marker size in meters (diffdrive)
+marker_length = 0.085    # Marker size in meters (salpchain)
 calibration_file = 'calibration_chessboard.yaml'
 
 # Input/Output paths
-input_dir = "cw"  # <-- set your actual input folder here
+input_dir = "chain_videos"  # <-- set your actual input folder here
 output_csv_dir = "processed_csv"
 output_video_dir = "processed_videos"
 
@@ -77,7 +78,7 @@ for videofile in file_list:
     output_video = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
 
     # ArUco setup
-    aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_100)
+    aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_100)
     parameters = cv2.aruco.DetectorParameters()
 
     # Camera intrinsics
@@ -158,9 +159,9 @@ for videofile in file_list:
 
             output_video.write(frame)
             # Optional live preview (press 'q' to quit)
-            # cv2.imshow("Frame", frame)
-            # if cv2.waitKey(1) & 0xFF == ord('q'):
-            #     break
+            cv2.imshow("Frame", frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
     video.release()
     output_video.release()
