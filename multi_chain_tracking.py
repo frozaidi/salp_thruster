@@ -97,9 +97,9 @@ for videofile in file_list:
 
     # Nice distinct BGR colors for trails (3 robots)
     trail_colors = [
-        (9, 63, 215),    # orange-ish
-        (0, 200, 0),     # green
-        (200, 0, 200)    # purple
+        (0, 0, 255),    # orange-ish
+        (0, 255, 0),    # green
+        (255, 0, 0)     # blue-ish
     ]
     color_map = {rid: trail_colors[i % len(trail_colors)] for i, rid in enumerate(robot_ids)}
 
@@ -187,8 +187,8 @@ for videofile in file_list:
                             v = int(np.mean(robot_corners[0][:, 1]))
                             trajectory_points[rid].append((u, v))
 
-                            # Draw current axes only when detected
-                            cv2.drawFrameAxes(frame, mtx, dst, rvec_robot, tvec_robot, 0.1)
+                            # NOTE: Removed axes drawing so they don't appear in final image
+                            # cv2.drawFrameAxes(frame, mtx, dst, rvec_robot, tvec_robot, 0.1)
 
             # --- Draw trajectories for ALL robots on EVERY frame ---
             for rid in robot_ids:
